@@ -1,4 +1,4 @@
-# TGCloud
+# QuantXcloud
 
 TGCloud is a cloud storage solution that provides **unlimited storage** by leveraging Telegram's API. Built with **Next.js**, **Drizzle ORM**, **PostgreSQL**, and **Better Auth** for authentication, TGCloud offers a simple, secure, and free way to store and manage files.
 
