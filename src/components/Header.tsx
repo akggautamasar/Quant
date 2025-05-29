@@ -9,7 +9,7 @@ export default async function Header() {
 				<Link href="/" className="flex items-center" prefetch={false}>
 					<CloudIcon className="h-6 w-6 mr-2" />
 					<span className="font-bold text-lg">
-						TG <span className="text-red-800">Cloud</span>
+						QuantX<span className="text-red-800">Cloud</span>
 					</span>
 				</Link>
 				<div className="ml-auto flex items-center gap-4">
