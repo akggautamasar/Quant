@@ -1,7 +1,12 @@
 import { withSentryConfig } from '@sentry/nextjs';
-
 import { NextConfig } from 'next';
-const nextConfig: NextConfig = {
+
+const sentryWebpackPluginOptions = {
+  silent: true, // Suppresses all logs
+  include: './',
+  ignore: ['node_modules', 'next.config.js'],
+};
+const nextConfig: NextConfig = withSentryConfig({
 	images: {
 		remotePatterns: [
 			{
@@ -29,14 +34,8 @@ const nextConfig: NextConfig = {
 		config.resolve.fallback = { fs: false, net: false, async_hooks: false };
 		return config;
 	}
-};
+}, sentryWebpackPluginOptions);
 
-export default withSentryConfig(nextConfig, {
-	org: 'kumneger-cg',
-	project: 'tg-cloud',
-	silent: !process.env.CI,
-	widenClientFileUpload: true,
-	hideSourceMaps: true,
-	disableLogger: true,
+export default nextConfig;
 	automaticVercelMonitors: true
 });
