@@ -12,7 +12,7 @@ import {
 import { env } from '@/env';
 import { relations } from 'drizzle-orm';
 
-export const planEnum = pgEnum('plan', ['ANNUAL', 'MONTHLY']);
+export const subscriptionPlanEnum = pgEnum('subscription_plan', ['ANNUAL', 'MONTHLY']);
 
 export const usersTable = pgTable(
 	'usersTable',
