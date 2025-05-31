@@ -12,7 +12,7 @@ import {
 import { env } from '@/env';
 import { relations } from 'drizzle-orm';
 
-export const subscriptionPlanEnum = pgEnum('subscription_plan', ['ANNUAL', 'MONTHLY']);
+export const subscriptionPlanEnum = pgEnum('auth_subscription_plan', ['ANNUAL', 'MONTHLY']);
 
 export const usersTable = pgTable(
 	'usersTable',
@@ -28,7 +28,7 @@ export const usersTable = pgTable(
 		hasPublicTgChannel: boolean('hasPublicChannel'),
 		isSubscribedToPro: boolean('is_subscribed_to_pro').default(false),
 		subscriptionDate: date('subscription_date'),
-		plan: subscriptionPlanEnum('plan'),
+		plan: subscriptionPlanEnum('auth_subscription_plan'),
 		emailVerified: boolean('emailVerified'),
 		image: text('image'),
 		createdAt: timestamp('createdAt', { mode: 'string' }).$defaultFn(() =>
@@ -150,7 +150,7 @@ export const paymentsTable = pgTable(
 		customizationLogo: text('customizationLogo'),
 		paymentDate: date('paymentDate').$defaultFn(() => new Date().toISOString()),
 		isPaymentDONE: boolean('isPaymentDONE').default(false),
-		plan: subscriptionPlanEnum('plan')
+		plan: subscriptionPlanEnum('auth_subscription_plan')
 	},
 	(table) => ({
 		fkUserId: foreignKey({
