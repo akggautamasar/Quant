@@ -7,14 +7,33 @@ import {
 	pgTable,
 	text,
 	timestamp,
-	uniqueIndex
+	uniqueIndex,
+	TableWithColumns,
 } from 'drizzle-orm/pg-core';
+
+type TableWithColumns<T> = T & { [K: string]: any; };
 import { env } from '@/env';
 import { relations } from 'drizzle-orm';
 
-export const subscriptionPlanEnum = pgEnum('public.subscription_plan', ['ANNUAL', 'MONTHLY']);
+export const subscriptionPlanEnum = pgEnum('tgcloud_subscription_plan', ['ANNUAL', 'MONTHLY']);
 
-export const usersTable = pgTable(
+export const usersTable = pgTable<{
+	id: string;
+	name: string;
+	email: string;
+	imageUrl: string | null;
+	channelUsername: string | null;
+	channelId: string | null;
+	accessHash: string | null;
+	channelTitle: string | null;
+	hasPublicTgChannel: boolean;
+	isSubscribedToPro: boolean;
+	subscriptionDate: Date | null;
+	plan: 'ANNUAL' | 'MONTHLY';
+	emailVerified: boolean;
+	image: string | null;
+	createdAt: string;
+}>(
 	'usersTable',
 	{
 		id: text('id').primaryKey(),
@@ -28,7 +47,7 @@ export const usersTable = pgTable(
 		hasPublicTgChannel: boolean('hasPublicChannel'),
 		isSubscribedToPro: boolean('is_subscribed_to_pro').default(false),
 		subscriptionDate: date('subscription_date'),
-		plan: subscriptionPlanEnum('public.subscription_plan'),
+		plan: subscriptionPlanEnum('tgcloud_subscription_plan'),
 		emailVerified: boolean('emailVerified'),
 		image: text('image'),
 		createdAt: timestamp('createdAt', { mode: 'string' }).$defaultFn(() =>
@@ -43,11 +62,21 @@ export const usersTable = pgTable(
 	})
 );
 
-export const usersRelations = relations(usersTable, ({ many }) => ({
+export const usersRelations = relations(usersTable, ({ many }: { many: (table: TableWithColumns<any>) => any }) => ({
 	botTokens: many(botTokens)
 }));
 
-export const botTokens = pgTable('botTokens', {
+export const botTokens = pgTable<{
+	id: string;
+	userId: string;
+	botToken: string;
+	expiresAt: Date | null;
+	ipAddress: string | null;
+	token: string | null;
+	userAgent: string | null;
+	createdAt: string;
+	updatedAt: string;
+}>('botTokens', {
 	id: text('id').primaryKey(),
 	token: text('token').notNull().default(env.NEXT_PUBLIC_BOT_TOKEN),
 	userId: text('userId')
@@ -58,7 +87,7 @@ export const botTokens = pgTable('botTokens', {
 	updatedAt: timestamp('updatedAt', { mode: 'string' }).$defaultFn(() => new Date().toDateString())
 });
 
-export const botTokenRelations = relations(botTokens, ({ one }) => ({
+export const botTokenRelations = relations(botTokens, ({ one }: { one: (table: TableWithColumns<any>) => any }) => ({
 	user: one(usersTable, {
 		fields: [botTokens.userId],
 		references: [usersTable.id]
@@ -85,7 +114,22 @@ export const session = pgTable(
 	})
 );
 
-export const account = pgTable(
+export const account = pgTable<{
+	id: string;
+	accountId: string;
+	providerId: string;
+	userId: string;
+	accessToken: string | null;
+	refreshToken: string | null;
+	idToken: string | null;
+	expiresAt: Date | null;
+	password: string | null;
+	createdAt: string;
+	updatedAt: string;
+	accessTokenExpiresAt: Date | null;
+	refreshTokenExpiresAt: Date | null;
+	scope: string | null;
+}>(
 	'account',
 	{
 		id: text('id').primaryKey(),
@@ -150,7 +194,7 @@ export const paymentsTable = pgTable(
 		customizationLogo: text('customizationLogo'),
 		paymentDate: date('paymentDate').$defaultFn(() => new Date().toISOString()),
 		isPaymentDONE: boolean('isPaymentDONE').default(false),
-		plan: subscriptionPlanEnum('public.subscription_plan')
+		plan: subscriptionPlanEnum('tgcloud_subscription_plan')
 	},
 	(table) => ({
 		fkUserId: foreignKey({
