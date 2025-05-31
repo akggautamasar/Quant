@@ -150,7 +150,7 @@ export const paymentsTable = pgTable(
 		customizationLogo: text('customizationLogo'),
 		paymentDate: date('paymentDate').$defaultFn(() => new Date().toISOString()),
 		isPaymentDONE: boolean('isPaymentDONE').default(false),
-		plan: planEnum('plan')
+		plan: subscriptionPlanEnum('plan')
 	},
 	(table) => ({
 		fkUserId: foreignKey({
