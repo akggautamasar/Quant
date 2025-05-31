@@ -26,10 +26,14 @@ export default function LoginPage() {
 				<CardContent className="grid gap-4">
 					<form
 						action={async () => {
-							await client.signIn.social({
-								provider: 'google',
-								callbackURL: '/connect-telegram'
-							});
+							try {
+								await client.signIn.social({
+									provider: 'google',
+									callbackURL: '/api/auth/callback/google'
+								});
+							} catch (error) {
+								console.error('Error logging in with Google:', error);
+							}
 						}}
 					>
 						<LoginButton
@@ -43,10 +47,14 @@ export default function LoginPage() {
 					</form>
 					<form
 						action={async () => {
-							await client.signIn.social({
-								provider: 'github',
-								callbackURL: '/connect-telegram'
-							});
+							try {
+								await client.signIn.social({
+									provider: 'github',
+									callbackURL: '/api/auth/callback/github'
+								});
+							} catch (error) {
+								console.error('Error logging in with GitHub:', error);
+							}
 						}}
 					>
 						<LoginButton
