@@ -28,7 +28,7 @@ export const usersTable = pgTable(
 		hasPublicTgChannel: boolean('hasPublicChannel'),
 		isSubscribedToPro: boolean('is_subscribed_to_pro').default(false),
 		subscriptionDate: date('subscription_date'),
-		plan: planEnum('plan'),
+		plan: subscriptionPlanEnum('plan'),
 		emailVerified: boolean('emailVerified'),
 		image: text('image'),
 		createdAt: timestamp('createdAt', { mode: 'string' }).$defaultFn(() =>
